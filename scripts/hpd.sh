@@ -2,10 +2,10 @@
 set -euo pipefail
 
 
-MODEL_PATH="../models/Meta-Llama-3___1-8B-Instruct"
+MODEL_PATH=""
 TOKENIZER_PATH=""
 AE_VECTOR="./results/ae_token_tuning2/ae_vector.pt"
-HPD_TRAIN_DS="./train4096"
+HPD_TRAIN_DS="./"
 HPD_TEST_JSON="./en_test_set.json"
 
 OUT_DIR="./outputs-hpd-memkd"
@@ -19,7 +19,7 @@ python train_mem_phase1_kd_hpd.py \
   --hpd_train_ds "${HPD_TRAIN_DS}" \
   --N_mem_tokens 1 \
   --initial_max_iterations 2500 \
-  --early_stopping_patience 1000 \
+  --early_stopping_patience 500 \
   --lm_loss_weight 0.5 \
   --kd_T_tokens 32 \
   --kd_temperature 2.0 \
