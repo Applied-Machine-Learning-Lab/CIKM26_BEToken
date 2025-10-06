@@ -7,18 +7,13 @@ We compress a long system prompt **P** into a **single learnable embedding** (th
 
 ## Quick start
 
-**Hardware & precision**
-
-* Experiments are designed to run on A800 80 G.
-* Training and inference use **bfloat16** by default.
-
 **Environment**
 
 ```bash
 # Create the conda environment
 conda env create -f myenv.yaml
 
-# Install FlashAttention v2 (required for long-context efficiency)
+# Install FlashAttention v2
 pip install flash-attn==2.7.4.post1 --no-build-isolation
 ```
 
@@ -181,7 +176,7 @@ Scripts to measure performance of learned `[BE]` tokens and baselines:
 
 * **GSM8K baselines**
   `baseline_eval_llama.py`, `baseline_eval_qwen.py` compare a base model **with** the full few-shot prompt vs. **without** any prompt. Adjust `--gen_max_new_tokens` and `--gen_temperature` for decoding.
-  (Prompt format follows the settings from the Hugging Face dataset *meta-llama/Llama-3.1-8B-Instruct-evals*.)
+  (Prompts follows the settings from the Hugging Face dataset *meta-llama/Llama-3.1-8B-Instruct-evals*.)
 * **HPD perplexity**
   `eval_ppl_hpd.py` computes token-level PPL on the HPD test set by prepending `[BE]` to user queries. Provide `--mem_vector_path` (the saved BE vector), base model path, and test JSON; outputs a PPL summary.
 * **RoleLLM win-rate**
@@ -198,7 +193,7 @@ Scripts to measure performance of learned `[BE]` tokens and baselines:
 │   ├── ae_corpus/             # Generic text corpus for AE pre-training
 │   ├── hpd/                   # HPD dataset (saved via datasets.save_to_disk)
 │   ├── RoleBench/             # RoleBench descriptions, instructions, test splits
-│   ├── MathInstruct.json      # Math instruct data for GSM KD
+│   ├── MathInstruct.json      # Math data for GSM8K KD
 │   └── gsm8k_test.jsonl       # GSM8K test set
 ├── train/                     # Stage 0/1/2 training scripts
 │   ├── train_ae_token_llama.py
@@ -215,9 +210,9 @@ Scripts to measure performance of learned `[BE]` tokens and baselines:
 │   ├── eval_ppl_hpd.py
 │   ├── rolellm_fewshot.py
 │   └── rolellm_gpt_eval.py
-├── results/                   # Saved AE/BE vectors, curves, summaries
+├── results/                   # Saved AE vectors
 │   └── ae_token_tuning2/
-├── scripts/                   # End-to-end helper shell scripts
+├── scripts/                  
 │   ├── gsm.sh
 │   ├── hpd.sh
 │   └── rolellm.sh
